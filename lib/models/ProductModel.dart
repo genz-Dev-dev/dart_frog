@@ -6,7 +6,10 @@ class ProductModel {
   final String productName;
   final String categoryId;
   final String supplierId;
-  final double price;
+  final double price;          // original / regular price
+  final double? salePrice;     // sale price (null = not on sale)
+  final DateTime? saleStart;   // when the sale begins
+  final DateTime? saleEnd;     // when the sale ends
   final int stock;
   final String? description;
   final List<String> images;
@@ -28,6 +31,9 @@ class ProductModel {
     required this.categoryId,
     required this.supplierId,
     required this.price,
+    this.salePrice,
+    this.saleStart,
+    this.saleEnd,
     required this.stock,
     this.description,
     List<String>? images,
@@ -45,14 +51,41 @@ class ProductModel {
         createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
-  double get finalPrice {
+  // ---------------------------------------------------------------------------
+  // Computed helpers
+  // ---------------------------------------------------------------------------
+
+  /// Returns true when there is an active sale price right now.
+  bool get isOnSale {
+    if (salePrice == null) return false;
+    final now = DateTime.now();
+    if (saleStart != null && now.isBefore(saleStart!)) return false;
+    if (saleEnd != null && now.isAfter(saleEnd!)) return false;
+    return true;
+  }
+
+  /// The effective price the customer pays: salePrice (if active) → discounted
+  /// price → regular price.
+  double get effectivePrice {
+    if (isOnSale) return salePrice!;
     if (discountPercent != null && discountPercent! > 0) {
       return price - (price * discountPercent! / 100);
     }
     return price;
   }
 
+  /// How much the customer saves (in currency).
+  double get savingsAmount => price - effectivePrice;
+
+  /// Saving as a percentage of the original price.
+  double get savingsPercent =>
+      price > 0 ? (savingsAmount / price * 100) : 0.0;
+
   bool get inStock => stock > 0;
+
+  // ---------------------------------------------------------------------------
+  // Serialization
+  // ---------------------------------------------------------------------------
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
@@ -62,6 +95,15 @@ class ProductModel {
       categoryId: map['category_id'] as String,
       supplierId: map['supplier_id'] as String,
       price: (map['price'] as num).toDouble(),
+      salePrice: map['sale_price'] != null
+          ? (map['sale_price'] as num).toDouble()
+          : null,
+      saleStart: map['sale_start'] != null
+          ? DateTime.parse(map['sale_start'].toString())
+          : null,
+      saleEnd: map['sale_end'] != null
+          ? DateTime.parse(map['sale_end'].toString())
+          : null,
       stock: map['stock'] as int,
       description: map['description'] as String?,
       images: List<String>.from(map['images'] ?? []),
@@ -92,6 +134,9 @@ class ProductModel {
       'category_id': categoryId,
       'supplier_id': supplierId,
       'price': price,
+      'sale_price': salePrice,
+      'sale_start': saleStart?.toIso8601String(),
+      'sale_end': saleEnd?.toIso8601String(),
       'stock': stock,
       'description': description,
       'images': images,
@@ -103,6 +148,10 @@ class ProductModel {
       'weight': weight,
       'dimensions': dimensions,
       'is_active': isActive,
+      'is_on_sale': isOnSale,
+      'effective_price': effectivePrice,
+      'savings_amount': savingsAmount,
+      'savings_percent': double.parse(savingsPercent.toStringAsFixed(2)),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
@@ -115,6 +164,9 @@ class ProductModel {
     String? categoryId,
     String? supplierId,
     double? price,
+    double? salePrice,
+    DateTime? saleStart,
+    DateTime? saleEnd,
     int? stock,
     String? description,
     List<String>? images,
@@ -136,6 +188,9 @@ class ProductModel {
       categoryId: categoryId ?? this.categoryId,
       supplierId: supplierId ?? this.supplierId,
       price: price ?? this.price,
+      salePrice: salePrice ?? this.salePrice,
+      saleStart: saleStart ?? this.saleStart,
+      saleEnd: saleEnd ?? this.saleEnd,
       stock: stock ?? this.stock,
       description: description ?? this.description,
       images: images ?? this.images,
@@ -152,4 +207,3 @@ class ProductModel {
     );
   }
 }
-

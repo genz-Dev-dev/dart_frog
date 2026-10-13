@@ -1,14 +1,14 @@
-import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 import '../services/UserService.dart';
 import '../repositories/UserRepository.dart';
 import '../database/Mongodb.dart';
+import '../utils/ApiResponse.dart';
 
 /// Handles all auth-related HTTP concerns:
 /// - request parsing
 /// - input validation
 /// - delegating to [AuthService]
-/// - building HTTP responses
+/// - building HTTP responses via [ApiResponse]
 class AuthController {
   final AuthService _authService;
 
@@ -38,13 +38,14 @@ class AuthController {
 
       // --- Validation ---
       if (name == null || name.trim().isEmpty) {
-        return _badRequest('Name is required.');
+        return ApiResponse.badRequest('Name is required.');
       }
       if (email == null || !email.contains('@')) {
-        return _badRequest('A valid email is required.');
+        return ApiResponse.badRequest('A valid email is required.');
       }
       if (password == null || password.length < 6) {
-        return _badRequest('Password must be at least 6 characters.');
+        return ApiResponse.badRequest(
+            'Password must be at least 6 characters.');
       }
 
       // --- Delegate to service ---
@@ -54,22 +55,14 @@ class AuthController {
         password: password,
       );
 
-      return Response.json(
-        statusCode: HttpStatus.created,
-        body: {
-          'success': true,
-          'message': 'Account created successfully.',
-          'user': user.toJson(),
-        },
+      return ApiResponse.created(
+        data: user.toJson(),
+        message: 'Account created successfully.',
       );
     } on FormatException {
-      return _badRequest('Invalid JSON body.');
+      return ApiResponse.badRequest('Invalid JSON body.');
     } catch (e) {
-      final message = e.toString().replaceAll('Exception: ', '');
-      return Response.json(
-        statusCode: HttpStatus.badRequest,
-        body: {'success': false, 'error': message},
-      );
+      return ApiResponse.badRequest(ApiResponse.cleanError(e));
     }
   }
 
@@ -87,10 +80,10 @@ class AuthController {
 
       // --- Validation ---
       if (email == null || email.trim().isEmpty) {
-        return _badRequest('Email is required.');
+        return ApiResponse.badRequest('Email is required.');
       }
       if (password == null || password.isEmpty) {
-        return _badRequest('Password is required.');
+        return ApiResponse.badRequest('Password is required.');
       }
 
       // --- Delegate to service ---
@@ -99,33 +92,14 @@ class AuthController {
         password: password,
       );
 
-      return Response.json(
-        statusCode: HttpStatus.ok,
-        body: {
-          'success': true,
-          'message': 'Login successful.',
-          'token': token,
-        },
+      return ApiResponse.single(
+        data: {'token': token},
+        message: 'Login successful.',
       );
     } on FormatException {
-      return _badRequest('Invalid JSON body.');
+      return ApiResponse.badRequest('Invalid JSON body.');
     } catch (e) {
-      final message = e.toString().replaceAll('Exception: ', '');
-      return Response.json(
-        statusCode: HttpStatus.unauthorized,
-        body: {'success': false, 'error': message},
-      );
+      return ApiResponse.unauthorized(ApiResponse.cleanError(e));
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // Helpers
-  // ---------------------------------------------------------------------------
-  Response _badRequest(String message) {
-    return Response.json(
-      statusCode: HttpStatus.badRequest,
-      body: {'success': false, 'error': message},
-    );
-  }
 }
-
