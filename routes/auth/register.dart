@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import '../../lib/controllers/AuthController.dart';
+import 'package:e_commerces/controllers/AuthController.dart';
 
 final _controller = AuthController.create();
 

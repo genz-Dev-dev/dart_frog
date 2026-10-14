@@ -3,13 +3,6 @@ import 'package:mongo_dart/mongo_dart.dart';
 enum Gender { male, female, other, preferNotToSay }
 
 class AddressModel {
-  final String label; // home, work, other
-  final String street;
-  final String city;
-  final String? state;
-  final String country;
-  final String? postalCode;
-  final bool isDefault;
 
   AddressModel({
     required this.label,
@@ -32,6 +25,13 @@ class AddressModel {
       isDefault: map['is_default'] as bool? ?? false,
     );
   }
+  final String label; // home, work, other
+  final String street;
+  final String city;
+  final String? state;
+  final String country;
+  final String? postalCode;
+  final bool isDefault;
 
   Map<String, dynamic> toMap() {
     return {
@@ -47,19 +47,6 @@ class AddressModel {
 }
 
 class CustomerModel {
-  final ObjectId? id;
-  final String customerId;
-  final String name;
-  final Gender gender;
-  final String city;
-  final String? email;
-  final String? phone;
-  final String? avatarUrl;
-  final DateTime? dateOfBirth;
-  final List<AddressModel> addresses;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   CustomerModel({
     this.id,
@@ -108,6 +95,19 @@ class CustomerModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String customerId;
+  final String name;
+  final Gender gender;
+  final String city;
+  final String? email;
+  final String? phone;
+  final String? avatarUrl;
+  final DateTime? dateOfBirth;
+  final List<AddressModel> addresses;
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toMap() {
     return {

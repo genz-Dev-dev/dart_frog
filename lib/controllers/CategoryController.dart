@@ -1,15 +1,14 @@
-import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import '../models/CategoryModel.dart';
-import '../services/CategoryService.dart';
-import '../repositories/CategoryRepository.dart';
-import '../database/Mongodb.dart';
-import '../utils/ApiResponse.dart';
+import 'package:e_commerces/models/CategoryModel.dart';
+import 'package:e_commerces/services/CategoryService.dart';
+import 'package:e_commerces/repositories/CategoryRepository.dart';
+import 'package:e_commerces/database/Mongodb.dart';
+import 'package:e_commerces/utils/ApiResponse.dart';
 
 class CategoryController {
-  final CategoryService _service;
 
   CategoryController(this._service);
+  final CategoryService _service;
 
   static CategoryController build() {
     final repo = CategoryRepository();
@@ -101,14 +100,18 @@ class CategoryController {
 
       // Only allow updating these fields
       final allowed = <String, dynamic>{};
-      if (body.containsKey('category_name'))
+      if (body.containsKey('category_name')) {
         allowed['category_name'] = body['category_name'];
-      if (body.containsKey('description'))
+      }
+      if (body.containsKey('description')) {
         allowed['description'] = body['description'];
-      if (body.containsKey('image_url'))
+      }
+      if (body.containsKey('image_url')) {
         allowed['image_url'] = body['image_url'];
-      if (body.containsKey('is_active'))
+      }
+      if (body.containsKey('is_active')) {
         allowed['is_active'] = body['is_active'];
+      }
 
       if (allowed.isEmpty) {
         return ApiResponse.badRequest(

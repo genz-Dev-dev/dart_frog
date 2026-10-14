@@ -1,16 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class OrderDetailModel {
-  final ObjectId? id;
-  final String orderId;
-  final String productId;
-  final String productName;
-  final String? productImage;
-  final int quantity;
-  final double unitPrice;
-  final double discountPercent;
-  final double subtotal;
-  final DateTime createdAt;
 
   OrderDetailModel({
     this.id,
@@ -40,6 +30,16 @@ class OrderDetailModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String orderId;
+  final String productId;
+  final String productName;
+  final String? productImage;
+  final int quantity;
+  final double unitPrice;
+  final double discountPercent;
+  final double subtotal;
+  final DateTime createdAt;
 
   Map<String, dynamic> toMap() {
     return {

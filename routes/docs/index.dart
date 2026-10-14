@@ -6,7 +6,8 @@ Future<Response> onRequest(RequestContext context) async {
     return Response(statusCode: 405);
   }
 
-  const html = '''<!DOCTYPE html>
+  const html = '''
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />

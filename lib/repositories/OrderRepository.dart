@@ -1,6 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
-import '../models/OrderModel.dart';
-import '../database/Mongodb.dart';
+import 'package:e_commerces/models/OrderModel.dart';
+import 'package:e_commerces/database/Mongodb.dart';
 
 abstract class OrderRepository {
   Future<double?> getTotal(String orderId); // null if order doesn't exist
@@ -26,7 +26,7 @@ class MongoOrderRepository implements OrderRepository {
     await _col.updateOne(
       where.eq('order_id', orderId),
       {
-        '\$set': {
+        r'$set': {
           'status': OrderStatus.confirmed.name,
           'updated_at': DateTime.now().toIso8601String(),
         }

@@ -1,5 +1,5 @@
-import '../models/UserModel.dart';
-import '../database/Mongodb.dart';
+import 'package:e_commerces/models/UserModel.dart';
+import 'package:e_commerces/database/Mongodb.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class UserRepository {

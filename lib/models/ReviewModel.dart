@@ -1,19 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class ReviewModel {
-  final ObjectId? id;
-  final String reviewId;
-  final String productId;
-  final String customerId;
-  final String orderId;
-  final int rating;          // 1 - 5
-  final String? comment;
-  final List<String> images;
-  final bool isVerifiedPurchase;
-  final int helpfulCount;
-  final bool isVisible;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   ReviewModel({
     this.id,
@@ -55,6 +42,19 @@ class ReviewModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String reviewId;
+  final String productId;
+  final String customerId;
+  final String orderId;
+  final int rating;          // 1 - 5
+  final String? comment;
+  final List<String> images;
+  final bool isVerifiedPurchase;
+  final int helpfulCount;
+  final bool isVisible;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toMap() {
     return {

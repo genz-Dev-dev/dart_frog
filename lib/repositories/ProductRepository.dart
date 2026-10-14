@@ -1,5 +1,5 @@
-import '../database/Mongodb.dart';
-import '../models/ProductModel.dart';
+import 'package:e_commerces/database/Mongodb.dart';
+import 'package:e_commerces/models/ProductModel.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class ProductRepository {
@@ -10,7 +10,7 @@ class ProductRepository {
 
   Future<List<ProductModel>> findAll() async {
     final docs = await _col.find().toList();
-    return docs.map((doc) => ProductModel.fromMap(doc)).toList();
+    return docs.map(ProductModel.fromMap).toList();
   }
 
   Future<void> save(ProductModel product) async {
@@ -28,7 +28,7 @@ class ProductRepository {
     fields['updated_at'] = DateTime.now().toIso8601String();
     await _col.updateOne(
       where.eq('product_id', id),
-      {'\$set': fields},
+      {r'$set': fields},
     );
   }
 
@@ -42,7 +42,7 @@ class ProductRepository {
     final result = await _col.updateOne(
       where.eq('product_id', productId),
       {
-        '\$set': {
+        r'$set': {
           'sale_price': salePrice,
           'sale_start': saleStart?.toIso8601String(),
           'sale_end': saleEnd?.toIso8601String(),
@@ -61,7 +61,7 @@ class ProductRepository {
       where.ne('sale_price', null),
     ).toList();
 
-    final products = docs.map((doc) => ProductModel.fromMap(doc)).toList();
+    final products = docs.map(ProductModel.fromMap).toList();
 
     // Filter to only those whose sale window is currently active
     return products.where((p) => p.isOnSale).toList();

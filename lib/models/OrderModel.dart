@@ -11,15 +11,6 @@ enum OrderStatus {
 }
 
 class ShippingInfoModel {
-  final String recipientName;
-  final String phone;
-  final String street;
-  final String city;
-  final String? state;
-  final String country;
-  final String? postalCode;
-  final String? trackingNumber;
-  final String? courier;
 
   ShippingInfoModel({
     required this.recipientName,
@@ -46,6 +37,15 @@ class ShippingInfoModel {
       courier: map['courier'] as String?,
     );
   }
+  final String recipientName;
+  final String phone;
+  final String street;
+  final String city;
+  final String? state;
+  final String country;
+  final String? postalCode;
+  final String? trackingNumber;
+  final String? courier;
 
   Map<String, dynamic> toMap() {
     return {
@@ -63,23 +63,6 @@ class ShippingInfoModel {
 }
 
 class OrderModel {
-  final ObjectId? id;
-  final String orderId;
-  final String customerId;
-  final DateTime orderDate;
-  final double totalAmount;
-  final double subtotal;
-  final double shippingFee;
-  final double tax;
-  final double discount;
-  final String? couponCode;
-  final OrderStatus status;
-  final ShippingInfoModel? shippingInfo;
-  final String? notes;
-  final DateTime? deliveredAt;
-  final DateTime? cancelledAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   OrderModel({
     this.id,
@@ -140,6 +123,23 @@ class OrderModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String orderId;
+  final String customerId;
+  final DateTime orderDate;
+  final double totalAmount;
+  final double subtotal;
+  final double shippingFee;
+  final double tax;
+  final double discount;
+  final String? couponCode;
+  final OrderStatus status;
+  final ShippingInfoModel? shippingInfo;
+  final String? notes;
+  final DateTime? deliveredAt;
+  final DateTime? cancelledAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toMap() {
     return {

@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import '../models/UserModel.dart';
-import '../repositories/UserRepository.dart';
+import 'package:e_commerces/models/UserModel.dart';
+import 'package:e_commerces/repositories/UserRepository.dart';
 
 class AuthService {
-  final UserRepository _userRepository;
 
   AuthService(this._userRepository);
+  final UserRepository _userRepository;
 
   Future<User> register({
     required String name,

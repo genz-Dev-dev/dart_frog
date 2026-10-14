@@ -1,8 +1,8 @@
 import 'package:dart_frog/dart_frog.dart';
-import '../services/UserService.dart';
-import '../repositories/UserRepository.dart';
-import '../database/Mongodb.dart';
-import '../utils/ApiResponse.dart';
+import 'package:e_commerces/services/UserService.dart';
+import 'package:e_commerces/repositories/UserRepository.dart';
+import 'package:e_commerces/database/Mongodb.dart';
+import 'package:e_commerces/utils/ApiResponse.dart';
 
 /// Handles all auth-related HTTP concerns:
 /// - request parsing
@@ -10,9 +10,9 @@ import '../utils/ApiResponse.dart';
 /// - delegating to [AuthService]
 /// - building HTTP responses via [ApiResponse]
 class AuthController {
-  final AuthService _authService;
 
   AuthController(this._authService);
+  final AuthService _authService;
 
   // ---------------------------------------------------------------------------
   // Factory — wires up the full dependency chain

@@ -1,12 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class CartItemModel {
-  final String productId;
-  final String productName;
-  final String? productImage;
-  final double unitPrice;
-  final int quantity;
-  final double? discountPercent;
 
   CartItemModel({
     required this.productId,
@@ -16,13 +10,6 @@ class CartItemModel {
     required this.quantity,
     this.discountPercent,
   });
-
-  double get subtotal {
-    final effectivePrice = discountPercent != null
-        ? unitPrice * (1 - discountPercent! / 100)
-        : unitPrice;
-    return effectivePrice * quantity;
-  }
 
   factory CartItemModel.fromMap(Map<String, dynamic> map) {
     return CartItemModel(
@@ -35,6 +22,19 @@ class CartItemModel {
           ? (map['discount_percent'] as num).toDouble()
           : null,
     );
+  }
+  final String productId;
+  final String productName;
+  final String? productImage;
+  final double unitPrice;
+  final int quantity;
+  final double? discountPercent;
+
+  double get subtotal {
+    final effectivePrice = discountPercent != null
+        ? unitPrice * (1 - discountPercent! / 100)
+        : unitPrice;
+    return effectivePrice * quantity;
   }
 
   Map<String, dynamic> toMap() {
@@ -51,13 +51,6 @@ class CartItemModel {
 }
 
 class CartModel {
-  final ObjectId? id;
-  final String cartId;
-  final String customerId;
-  final List<CartItemModel> items;
-  final String? couponCode;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   CartModel({
     this.id,
@@ -70,9 +63,6 @@ class CartModel {
   })  : items = items ?? [],
         createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
-
-  double get totalAmount => items.fold(0, (sum, item) => sum + item.subtotal);
-  int get totalItems => items.fold(0, (sum, item) => sum + item.quantity);
 
   factory CartModel.fromMap(Map<String, dynamic> map) {
     return CartModel(
@@ -92,6 +82,16 @@ class CartModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String cartId;
+  final String customerId;
+  final List<CartItemModel> items;
+  final String? couponCode;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  double get totalAmount => items.fold(0, (sum, item) => sum + item.subtotal);
+  int get totalItems => items.fold(0, (sum, item) => sum + item.quantity);
 
   Map<String, dynamic> toMap() {
     return {

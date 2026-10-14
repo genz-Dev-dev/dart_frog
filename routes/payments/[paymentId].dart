@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import '../../lib/controllers/PaymentController.dart';
+import 'package:e_commerces/controllers/PaymentController.dart';
 
 /// GET /payments/:paymentId  — poll payment status
 Future<Response> onRequest(RequestContext context, String paymentId) async {

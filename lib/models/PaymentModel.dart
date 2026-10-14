@@ -22,24 +22,6 @@ enum PaymentStatus {
 }
 
 class PaymentModel {
-  final ObjectId? id;
-  final String paymentId;
-  final String orderId;
-  final String customerId;
-  final double amount;
-  final PaymentMethod paymentMethod;
-  final PaymentStatus status;
-  final String? transactionId;       // external gateway transaction ID
-  final String? gatewayResponse;     // raw response from payment gateway
-  final String? currency;
-  final String? cardLastFour;        // last 4 digits if card payment
-  final String? cardBrand;           // Visa, Mastercard, etc.
-  final double? refundedAmount;
-  final String? refundReason;
-  final DateTime? paidAt;
-  final DateTime? refundedAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   PaymentModel({
     this.id,
@@ -101,6 +83,24 @@ class PaymentModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String paymentId;
+  final String orderId;
+  final String customerId;
+  final double amount;
+  final PaymentMethod paymentMethod;
+  final PaymentStatus status;
+  final String? transactionId;       // external gateway transaction ID
+  final String? gatewayResponse;     // raw response from payment gateway
+  final String? currency;
+  final String? cardLastFour;        // last 4 digits if card payment
+  final String? cardBrand;           // Visa, Mastercard, etc.
+  final double? refundedAmount;
+  final String? refundReason;
+  final DateTime? paidAt;
+  final DateTime? refundedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toMap() {
     return {

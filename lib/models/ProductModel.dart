@@ -1,28 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class ProductModel {
-  final ObjectId? id;
-  final String productId;
-  final String productName;
-  final String categoryId;
-  final String supplierId;
-  final double price;          // original / regular price
-  final double? salePrice;     // sale price (null = not on sale)
-  final DateTime? saleStart;   // when the sale begins
-  final DateTime? saleEnd;     // when the sale ends
-  final int stock;
-  final String? description;
-  final List<String> images;
-  final double? discountPercent;
-  final double rating;
-  final int reviewCount;
-  final String? sku;
-  final String? barcode;
-  final double? weight;
-  final Map<String, dynamic>? dimensions; // {width, height, depth}
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   ProductModel({
     this.id,
@@ -50,38 +28,6 @@ class ProductModel {
   })  : images = images ?? [],
         createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
-
-  // ---------------------------------------------------------------------------
-  // Computed helpers
-  // ---------------------------------------------------------------------------
-
-  /// Returns true when there is an active sale price right now.
-  bool get isOnSale {
-    if (salePrice == null) return false;
-    final now = DateTime.now();
-    if (saleStart != null && now.isBefore(saleStart!)) return false;
-    if (saleEnd != null && now.isAfter(saleEnd!)) return false;
-    return true;
-  }
-
-  /// The effective price the customer pays: salePrice (if active) → discounted
-  /// price → regular price.
-  double get effectivePrice {
-    if (isOnSale) return salePrice!;
-    if (discountPercent != null && discountPercent! > 0) {
-      return price - (price * discountPercent! / 100);
-    }
-    return price;
-  }
-
-  /// How much the customer saves (in currency).
-  double get savingsAmount => price - effectivePrice;
-
-  /// Saving as a percentage of the original price.
-  double get savingsPercent =>
-      price > 0 ? (savingsAmount / price * 100) : 0.0;
-
-  bool get inStock => stock > 0;
 
   // ---------------------------------------------------------------------------
   // Serialization
@@ -125,6 +71,60 @@ class ProductModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String productId;
+  final String productName;
+  final String categoryId;
+  final String supplierId;
+  final double price;          // original / regular price
+  final double? salePrice;     // sale price (null = not on sale)
+  final DateTime? saleStart;   // when the sale begins
+  final DateTime? saleEnd;     // when the sale ends
+  final int stock;
+  final String? description;
+  final List<String> images;
+  final double? discountPercent;
+  final double rating;
+  final int reviewCount;
+  final String? sku;
+  final String? barcode;
+  final double? weight;
+  final Map<String, dynamic>? dimensions; // {width, height, depth}
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  // ---------------------------------------------------------------------------
+  // Computed helpers
+  // ---------------------------------------------------------------------------
+
+  /// Returns true when there is an active sale price right now.
+  bool get isOnSale {
+    if (salePrice == null) return false;
+    final now = DateTime.now();
+    if (saleStart != null && now.isBefore(saleStart!)) return false;
+    if (saleEnd != null && now.isAfter(saleEnd!)) return false;
+    return true;
+  }
+
+  /// The effective price the customer pays: salePrice (if active) → discounted
+  /// price → regular price.
+  double get effectivePrice {
+    if (isOnSale) return salePrice!;
+    if (discountPercent != null && discountPercent! > 0) {
+      return price - (price * discountPercent! / 100);
+    }
+    return price;
+  }
+
+  /// How much the customer saves (in currency).
+  double get savingsAmount => price - effectivePrice;
+
+  /// Saving as a percentage of the original price.
+  double get savingsPercent =>
+      price > 0 ? (savingsAmount / price * 100) : 0.0;
+
+  bool get inStock => stock > 0;
 
   Map<String, dynamic> toMap() {
     return {

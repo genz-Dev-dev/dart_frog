@@ -1,9 +1,9 @@
 import 'dart:convert';
-import '../errors/PaymentException.dart';
-import '../models/PaymentModel.dart';
-import '../payway/PayWayClient.dart';
-import '../repositories/OrderRepository.dart';
-import '../repositories/PaymentRepository.dart';
+import 'package:e_commerces/errors/PaymentException.dart';
+import 'package:e_commerces/models/PaymentModel.dart';
+import 'package:e_commerces/payway/PayWayClient.dart';
+import 'package:e_commerces/repositories/OrderRepository.dart';
+import 'package:e_commerces/repositories/PaymentRepository.dart';
 
 class PaymentService {
   PaymentService({

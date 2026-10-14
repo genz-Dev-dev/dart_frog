@@ -1,17 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class SupplierModel {
-  final ObjectId? id;
-  final String supplierId;
-  final String supplierName;
-  final String city;
-  final String phone;
-  final String? email;
-  final String? address;
-  final String? country;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   SupplierModel({
     this.id,
@@ -47,6 +36,17 @@ class SupplierModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String supplierId;
+  final String supplierName;
+  final String city;
+  final String phone;
+  final String? email;
+  final String? address;
+  final String? country;
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toMap() {
     return {

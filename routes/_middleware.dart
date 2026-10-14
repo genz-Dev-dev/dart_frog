@@ -1,6 +1,6 @@
 import 'package:dart_frog/dart_frog.dart';
-import '../lib/config/Dependencies.dart';
-import '../lib/controllers/PaymentController.dart';
+import 'package:e_commerces/config/Dependencies.dart';
+import 'package:e_commerces/controllers/PaymentController.dart';
 
 Handler middleware(Handler handler) {
   return (context) async {

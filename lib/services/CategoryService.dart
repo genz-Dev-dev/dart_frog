@@ -1,11 +1,11 @@
 import 'package:mongo_dart/mongo_dart.dart';
-import '../repositories/CategoryRepository.dart';
-import '../models/CategoryModel.dart';
+import 'package:e_commerces/repositories/CategoryRepository.dart';
+import 'package:e_commerces/models/CategoryModel.dart';
 
 class CategoryService {
-  final CategoryRepository _repo;
 
   CategoryService(this._repo);
+  final CategoryRepository _repo;
 
   // CREATE
   Future<CategoryModel> create(CategoryModel category) async {

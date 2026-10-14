@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import '../errors/PaymentException.dart';
-import '../services/PaymentService.dart';
-import '../utils/ApiResponse.dart';
+import 'package:e_commerces/errors/PaymentException.dart';
+import 'package:e_commerces/services/PaymentService.dart';
+import 'package:e_commerces/utils/ApiResponse.dart';
 
 class PaymentController {
   PaymentController(this._service);

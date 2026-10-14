@@ -45,7 +45,7 @@ Future<Response> onRequest(RequestContext context) async {
             }
           },
           'responses': {
-            '201': _ok('Account created', r'#/components/schemas/UserResponse'),
+            '201': _ok('Account created', '#/components/schemas/UserResponse'),
             '400': _err('Validation error'),
           }
         }
@@ -67,7 +67,7 @@ Future<Response> onRequest(RequestContext context) async {
             }
           },
           'responses': {
-            '200': _ok('Login successful', r'#/components/schemas/TokenResponse'),
+            '200': _ok('Login successful', '#/components/schemas/TokenResponse'),
             '401': _err('Invalid credentials'),
           }
         }
@@ -79,7 +79,7 @@ Future<Response> onRequest(RequestContext context) async {
           'tags': ['Products'],
           'summary': 'List all products',
           'responses': {
-            '200': _ok('Product list', r'#/components/schemas/ProductListResponse'),
+            '200': _ok('Product list', '#/components/schemas/ProductListResponse'),
           }
         },
         'post': {
@@ -94,7 +94,7 @@ Future<Response> onRequest(RequestContext context) async {
             }
           },
           'responses': {
-            '201': _ok('Product created', r'#/components/schemas/ProductResponse'),
+            '201': _ok('Product created', '#/components/schemas/ProductResponse'),
             '400': _err('Bad request'),
           }
         }
@@ -105,7 +105,7 @@ Future<Response> onRequest(RequestContext context) async {
           'summary': 'Get a product by ID',
           'parameters': [_pathParam('id', 'Product ID')],
           'responses': {
-            '200': _ok('Product found', r'#/components/schemas/ProductResponse'),
+            '200': _ok('Product found', '#/components/schemas/ProductResponse'),
             '404': _err('Product not found'),
           }
         }
@@ -138,7 +138,7 @@ Future<Response> onRequest(RequestContext context) async {
             }
           },
           'responses': {
-            '200': _ok('Sale price updated', r'#/components/schemas/ProductResponse'),
+            '200': _ok('Sale price updated', '#/components/schemas/ProductResponse'),
             '400': _err('Validation error'),
             '404': _err('Product not found'),
           }
@@ -149,7 +149,7 @@ Future<Response> onRequest(RequestContext context) async {
           'tags': ['Products'],
           'summary': 'List products currently on sale',
           'responses': {
-            '200': _ok('On-sale products', r'#/components/schemas/ProductListResponse'),
+            '200': _ok('On-sale products', '#/components/schemas/ProductListResponse'),
           }
         }
       },
@@ -177,7 +177,7 @@ Future<Response> onRequest(RequestContext context) async {
             }
           },
           'responses': {
-            '201': _ok('Checkout session created', r'#/components/schemas/PaymentCreatedResponse'),
+            '201': _ok('Checkout session created', '#/components/schemas/PaymentCreatedResponse'),
             '400': _err('Validation error'),
             '404': _err('Order not found'),
             '502': _err('PayWay gateway error'),
@@ -216,7 +216,7 @@ Future<Response> onRequest(RequestContext context) async {
           'summary': 'Poll payment status',
           'parameters': [_pathParam('paymentId', 'Payment ID (e.g. PAY1728912345678)')],
           'responses': {
-            '200': _ok('Payment status', r'#/components/schemas/PaymentStatusResponse'),
+            '200': _ok('Payment status', '#/components/schemas/PaymentStatusResponse'),
             '404': _err('Payment not found'),
           }
         }

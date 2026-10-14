@@ -14,15 +14,6 @@ enum NotificationType {
 }
 
 class NotificationModel {
-  final ObjectId? id;
-  final String notificationId;
-  final String customerId;
-  final NotificationType type;
-  final String title;
-  final String message;
-  final String? referenceId;   // order_id, payment_id, product_id etc.
-  final bool isRead;
-  final DateTime createdAt;
 
   NotificationModel({
     this.id,
@@ -54,6 +45,15 @@ class NotificationModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String notificationId;
+  final String customerId;
+  final NotificationType type;
+  final String title;
+  final String message;
+  final String? referenceId;   // order_id, payment_id, product_id etc.
+  final bool isRead;
+  final DateTime createdAt;
 
   Map<String, dynamic> toMap() {
     return {

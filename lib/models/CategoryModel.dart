@@ -1,14 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class CategoryModel {
-  final ObjectId? id;
-  final String categoryId;
-  final String categoryName;
-  final String? description;
-  final String? imageUrl;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   CategoryModel({
     this.id,
@@ -38,6 +30,14 @@ class CategoryModel {
           : DateTime.now(),
     );
   }
+  final ObjectId? id;
+  final String categoryId;
+  final String categoryName;
+  final String? description;
+  final String? imageUrl;
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toMap() {
     return {

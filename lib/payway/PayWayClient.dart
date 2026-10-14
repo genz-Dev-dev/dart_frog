@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
-import '../errors/PaymentException.dart';
+import 'package:e_commerces/errors/PaymentException.dart';
 
 /// ABA PayWay API client.
 /// Sandbox: https://checkout-sandbox.payway.com.kh/
@@ -96,7 +96,7 @@ class PayWayClient {
   String _sign(Map<String, String> params) {
     final sorted = (params.keys.toList()..sort())
         .map((k) => params[k]!)
-        .join('');
+        .join();
     final key = utf8.encode(apiKey);
     final msg = utf8.encode(sorted);
     final digest = Hmac(sha512, key).convert(msg);

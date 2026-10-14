@@ -1,10 +1,10 @@
-import '../models/ProductModel.dart';
-import '../repositories/ProductRepository.dart';
+import 'package:e_commerces/models/ProductModel.dart';
+import 'package:e_commerces/repositories/ProductRepository.dart';
 
 class ProductService {
-  final ProductRepository _productRepository;
 
   ProductService(this._productRepository);
+  final ProductRepository _productRepository;
 
   Future<List<ProductModel>> getAllProducts() async {
     return _productRepository.findAll();

@@ -1,12 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class User {
-  final ObjectId? objectId;
-  final String id;
-  final String name;
-  final String email;
-  final String passwordHash;
-  final DateTime createdAt;
 
   User({
     this.objectId,
@@ -16,6 +10,25 @@ class User {
     required this.passwordHash,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      objectId: map['_id'] as ObjectId?,
+      id: map['id'] as String,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      passwordHash: map['password_hash'] as String,
+      createdAt: map['created_at'] != null
+          ? DateTime.parse(map['created_at'].toString())
+          : DateTime.now(),
+    );
+  }
+  final ObjectId? objectId;
+  final String id;
+  final String name;
+  final String email;
+  final String passwordHash;
+  final DateTime createdAt;
 
   /// Public-safe JSON (no password hash)
   Map<String, dynamic> toJson() {
@@ -37,18 +50,5 @@ class User {
       'password_hash': passwordHash,
       'created_at': createdAt.toIso8601String(),
     };
-  }
-
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
-      objectId: map['_id'] as ObjectId?,
-      id: map['id'] as String,
-      name: map['name'] as String,
-      email: map['email'] as String,
-      passwordHash: map['password_hash'] as String,
-      createdAt: map['created_at'] != null
-          ? DateTime.parse(map['created_at'].toString())
-          : DateTime.now(),
-    );
   }
 }

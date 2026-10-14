@@ -1,6 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
-import '../database/Mongodb.dart';
-import '../models/CategoryModel.dart';
+import 'package:e_commerces/database/Mongodb.dart';
+import 'package:e_commerces/models/CategoryModel.dart';
 
 class CategoryRepository {
   static const String _collection = 'categories';
@@ -16,7 +16,7 @@ class CategoryRepository {
   // READ ALL
   Future<List<CategoryModel>> findAll() async {
     final docs = await _col.find().toList();
-    return docs.map((d) => CategoryModel.fromMap(d)).toList();
+    return docs.map(CategoryModel.fromMap).toList();
   }
 
   // READ ONE
@@ -31,7 +31,7 @@ class CategoryRepository {
     fields['updated_at'] = DateTime.now().toIso8601String();
     await _col.updateOne(
       where.eq('category_id', categoryId),
-      {'\$set': fields},
+      {r'$set': fields},
     );
     return findById(categoryId);
   }

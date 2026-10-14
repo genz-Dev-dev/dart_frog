@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import '../../lib/controllers/CategoryController.dart';
+import 'package:e_commerces/controllers/CategoryController.dart';
 
 final _controller = CategoryController.build();
 

@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:mongo_dart/mongo_dart.dart';
-import '../controllers/PaymentController.dart';
-import '../payway/PayWayClient.dart';
-import '../repositories/OrderRepository.dart';
-import '../repositories/PaymentRepository.dart';
-import '../services/PaymentService.dart';
+import 'package:e_commerces/controllers/PaymentController.dart';
+import 'package:e_commerces/payway/PayWayClient.dart';
+import 'package:e_commerces/repositories/OrderRepository.dart';
+import 'package:e_commerces/repositories/PaymentRepository.dart';
+import 'package:e_commerces/services/PaymentService.dart';
 
 /// Singleton dependency container.
 /// Reads credentials from environment variables.

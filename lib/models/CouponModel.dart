@@ -3,21 +3,6 @@ import 'package:mongo_dart/mongo_dart.dart';
 enum DiscountType { percentage, fixedAmount }
 
 class CouponModel {
-  final ObjectId? id;
-  final String couponId;
-  final String code;
-  final DiscountType discountType;
-  final double discountValue;
-  final double? minOrderAmount;
-  final double? maxDiscountAmount;  // cap for percentage discounts
-  final int? usageLimit;
-  final int usedCount;
-  final String? applicableCategoryId;  // null = applies to all
-  final bool isActive;
-  final DateTime startDate;
-  final DateTime endDate;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   CouponModel({
     this.id,
@@ -37,24 +22,6 @@ class CouponModel {
     DateTime? updatedAt,
   })  : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
-
-  bool get isExpired => DateTime.now().isAfter(endDate);
-  bool get isUsable =>
-      isActive && !isExpired && (usageLimit == null || usedCount < usageLimit!);
-
-  double computeDiscount(double orderTotal) {
-    if (!isUsable) return 0;
-    if (minOrderAmount != null && orderTotal < minOrderAmount!) return 0;
-
-    if (discountType == DiscountType.fixedAmount) {
-      return discountValue.clamp(0, orderTotal);
-    } else {
-      final discount = orderTotal * discountValue / 100;
-      return maxDiscountAmount != null
-          ? discount.clamp(0, maxDiscountAmount!)
-          : discount;
-    }
-  }
 
   factory CouponModel.fromMap(Map<String, dynamic> map) {
     return CouponModel(
@@ -85,6 +52,39 @@ class CouponModel {
           ? DateTime.parse(map['updated_at'].toString())
           : DateTime.now(),
     );
+  }
+  final ObjectId? id;
+  final String couponId;
+  final String code;
+  final DiscountType discountType;
+  final double discountValue;
+  final double? minOrderAmount;
+  final double? maxDiscountAmount;  // cap for percentage discounts
+  final int? usageLimit;
+  final int usedCount;
+  final String? applicableCategoryId;  // null = applies to all
+  final bool isActive;
+  final DateTime startDate;
+  final DateTime endDate;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  bool get isExpired => DateTime.now().isAfter(endDate);
+  bool get isUsable =>
+      isActive && !isExpired && (usageLimit == null || usedCount < usageLimit!);
+
+  double computeDiscount(double orderTotal) {
+    if (!isUsable) return 0;
+    if (minOrderAmount != null && orderTotal < minOrderAmount!) return 0;
+
+    if (discountType == DiscountType.fixedAmount) {
+      return discountValue.clamp(0, orderTotal);
+    } else {
+      final discount = orderTotal * discountValue / 100;
+      return maxDiscountAmount != null
+          ? discount.clamp(0, maxDiscountAmount!)
+          : discount;
+    }
   }
 
   Map<String, dynamic> toMap() {

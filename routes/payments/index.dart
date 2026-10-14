@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import '../../lib/controllers/PaymentController.dart';
+import 'package:e_commerces/controllers/PaymentController.dart';
 
 /// POST /payments  — create ABA PayWay checkout session
 Future<Response> onRequest(RequestContext context) async {

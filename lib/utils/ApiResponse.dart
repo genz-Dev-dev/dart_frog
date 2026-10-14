@@ -137,8 +137,7 @@ class ApiResponse {
 
   /// 400 Bad Request
   static Response badRequest(String error, {Map<String, dynamic>? details}) =>
-      ApiResponse.error(error,
-          statusCode: HttpStatus.badRequest, details: details);
+      ApiResponse.error(error, details: details);
 
   /// 401 Unauthorized
   static Response unauthorized([String error = 'Unauthorized.']) =>

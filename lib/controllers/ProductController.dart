@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
-import '../models/ProductModel.dart';
-import '../services/ProductService.dart';
-import '../repositories/ProductRepository.dart';
-import '../database/Mongodb.dart';
-import '../utils/ApiResponse.dart';
+import 'package:e_commerces/models/ProductModel.dart';
+import 'package:e_commerces/services/ProductService.dart';
+import 'package:e_commerces/repositories/ProductRepository.dart';
+import 'package:e_commerces/database/Mongodb.dart';
+import 'package:e_commerces/utils/ApiResponse.dart';
 
 class ProductController {
-  final ProductService _productService;
 
   ProductController(this._productService);
+  final ProductService _productService;
 
   static ProductController create() {
     final repo = ProductRepository();
@@ -87,7 +87,7 @@ class ProductController {
       final body = await context.request.json() as Map<String, dynamic>;
 
       final salePriceRaw = body['sale_price'];
-      final double? salePrice =
+      final salePrice =
           salePriceRaw != null ? (salePriceRaw as num).toDouble() : null;
 
       final saleStart = body['sale_start'] != null
