@@ -1,21 +1,20 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class SupplierModel {
-
   SupplierModel({
-    this.id,
     required this.supplierId,
     required this.supplierName,
     required this.city,
     required this.phone,
+    this.id,
     this.email,
     this.address,
     this.country,
     this.isActive = true,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory SupplierModel.fromMap(Map<String, dynamic> map) {
     return SupplierModel(
@@ -92,4 +91,3 @@ class SupplierModel {
     );
   }
 }
-

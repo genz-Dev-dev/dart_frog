@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:e_commerces/dto/PaymentDto.dart';
 import 'package:e_commerces/errors/PaymentException.dart';
 import 'package:e_commerces/services/PaymentService.dart';
 import 'package:e_commerces/utils/ApiResponse.dart';
@@ -15,21 +15,12 @@ class PaymentController {
     return _guard(() async {
       final body = await context.request.json() as Map<String, dynamic>;
 
-      final orderId = body['order_id'] as String?;
-      final customerId = body['customer_id'] as String?;
-      if (orderId == null || customerId == null) {
+      final dto = CreatePaymentDto.fromJson(body);
+      if (dto.orderId.isEmpty || dto.customerId.isEmpty) {
         throw PaymentException('order_id and customer_id are required');
       }
 
-      final result = await _service.createPayment(
-        orderId: orderId,
-        customerId: customerId,
-        currency: body['currency'] as String? ?? 'USD',
-        firstname: body['firstname'] as String? ?? '',
-        lastname: body['lastname'] as String? ?? '',
-        email: body['email'] as String? ?? '',
-        phone: body['phone'] as String? ?? '',
-      );
+      final result = await _service.createPayment(dto);
 
       return ApiResponse.created(
         data: result,

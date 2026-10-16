@@ -1,19 +1,18 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class OrderDetailModel {
-
   OrderDetailModel({
-    this.id,
     required this.orderId,
     required this.productId,
     required this.productName,
-    this.productImage,
     required this.quantity,
     required this.unitPrice,
+    this.id,
+    this.productImage,
     this.discountPercent = 0.0,
     DateTime? createdAt,
-  })  : subtotal = quantity * unitPrice * (1 - discountPercent / 100),
-        createdAt = createdAt ?? DateTime.now();
+  }) : subtotal = quantity * unitPrice * (1 - discountPercent / 100),
+       createdAt = createdAt ?? DateTime.now();
 
   factory OrderDetailModel.fromMap(Map<String, dynamic> map) {
     return OrderDetailModel(
@@ -56,4 +55,3 @@ class OrderDetailModel {
     };
   }
 }
-

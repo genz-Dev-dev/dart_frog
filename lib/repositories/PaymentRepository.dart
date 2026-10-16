@@ -1,5 +1,5 @@
-import 'package:mongo_dart/mongo_dart.dart';
 import 'package:e_commerces/models/PaymentModel.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 class PaymentRepository {
   PaymentRepository(this._db);
@@ -23,8 +23,7 @@ class PaymentRepository {
   }
 
   Future<List<PaymentModel>> findByCustomerId(String customerId) async {
-    final docs =
-        await _col.find(where.eq('customer_id', customerId)).toList();
+    final docs = await _col.find(where.eq('customer_id', customerId)).toList();
     return docs.map(PaymentModel.fromMap).toList();
   }
 }

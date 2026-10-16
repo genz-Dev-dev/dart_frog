@@ -22,14 +22,13 @@ enum PaymentStatus {
 }
 
 class PaymentModel {
-
   PaymentModel({
-    this.id,
     required this.paymentId,
     required this.orderId,
     required this.customerId,
     required this.amount,
     required this.paymentMethod,
+    this.id,
     this.status = PaymentStatus.pending,
     this.transactionId,
     this.gatewayResponse,
@@ -42,8 +41,8 @@ class PaymentModel {
     this.refundedAt,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory PaymentModel.fromMap(Map<String, dynamic> map) {
     return PaymentModel(
@@ -90,11 +89,11 @@ class PaymentModel {
   final double amount;
   final PaymentMethod paymentMethod;
   final PaymentStatus status;
-  final String? transactionId;       // external gateway transaction ID
-  final String? gatewayResponse;     // raw response from payment gateway
+  final String? transactionId; // external gateway transaction ID
+  final String? gatewayResponse; // raw response from payment gateway
   final String? currency;
-  final String? cardLastFour;        // last 4 digits if card payment
-  final String? cardBrand;           // Visa, Mastercard, etc.
+  final String? cardLastFour; // last 4 digits if card payment
+  final String? cardBrand; // Visa, Mastercard, etc.
   final double? refundedAmount;
   final String? refundReason;
   final DateTime? paidAt;
@@ -167,4 +166,3 @@ class PaymentModel {
     );
   }
 }
-

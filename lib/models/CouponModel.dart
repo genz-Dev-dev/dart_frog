@@ -3,25 +3,24 @@ import 'package:mongo_dart/mongo_dart.dart';
 enum DiscountType { percentage, fixedAmount }
 
 class CouponModel {
-
   CouponModel({
-    this.id,
     required this.couponId,
     required this.code,
     required this.discountType,
     required this.discountValue,
+    required this.startDate,
+    required this.endDate,
+    this.id,
     this.minOrderAmount,
     this.maxDiscountAmount,
     this.usageLimit,
     this.usedCount = 0,
     this.applicableCategoryId,
     this.isActive = true,
-    required this.startDate,
-    required this.endDate,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory CouponModel.fromMap(Map<String, dynamic> map) {
     return CouponModel(
@@ -59,10 +58,10 @@ class CouponModel {
   final DiscountType discountType;
   final double discountValue;
   final double? minOrderAmount;
-  final double? maxDiscountAmount;  // cap for percentage discounts
+  final double? maxDiscountAmount; // cap for percentage discounts
   final int? usageLimit;
   final int usedCount;
-  final String? applicableCategoryId;  // null = applies to all
+  final String? applicableCategoryId; // null = applies to all
   final bool isActive;
   final DateTime startDate;
   final DateTime endDate;
@@ -107,4 +106,3 @@ class CouponModel {
     };
   }
 }
-

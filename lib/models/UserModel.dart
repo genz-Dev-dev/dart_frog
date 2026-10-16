@@ -1,13 +1,12 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class User {
-
   User({
-    this.objectId,
     required this.id,
     required this.name,
     required this.email,
     required this.passwordHash,
+    this.objectId,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 

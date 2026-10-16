@@ -11,14 +11,13 @@ enum OrderStatus {
 }
 
 class ShippingInfoModel {
-
   ShippingInfoModel({
     required this.recipientName,
     required this.phone,
     required this.street,
     required this.city,
-    this.state,
     required this.country,
+    this.state,
     this.postalCode,
     this.trackingNumber,
     this.courier,
@@ -63,14 +62,13 @@ class ShippingInfoModel {
 }
 
 class OrderModel {
-
   OrderModel({
-    this.id,
     required this.orderId,
     required this.customerId,
-    DateTime? orderDate,
     required this.totalAmount,
     required this.subtotal,
+    this.id,
+    DateTime? orderDate,
     this.shippingFee = 0.0,
     this.tax = 0.0,
     this.discount = 0.0,
@@ -82,9 +80,9 @@ class OrderModel {
     this.cancelledAt,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : orderDate = orderDate ?? DateTime.now(),
-        createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : orderDate = orderDate ?? DateTime.now(),
+       createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory OrderModel.fromMap(Map<String, dynamic> map) {
     return OrderModel(
@@ -106,7 +104,8 @@ class OrderModel {
       ),
       shippingInfo: map['shipping_info'] != null
           ? ShippingInfoModel.fromMap(
-              map['shipping_info'] as Map<String, dynamic>)
+              map['shipping_info'] as Map<String, dynamic>,
+            )
           : null,
       notes: map['notes'] as String?,
       deliveredAt: map['delivered_at'] != null
@@ -203,4 +202,3 @@ class OrderModel {
     );
   }
 }
-

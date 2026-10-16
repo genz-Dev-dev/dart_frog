@@ -23,6 +23,8 @@ Future<Response> onRequest(RequestContext context) async {
     'tags': [
       {'name': 'Auth', 'description': 'User registration and login'},
       {'name': 'Products', 'description': 'Product catalogue and sale prices'},
+      {'name': 'Categories', 'description': 'Category management'},
+      {'name': 'Suppliers', 'description': 'Supplier management'},
       {'name': 'Payments', 'description': 'ABA PayWay KHQR checkout'},
     ],
     'paths': {
@@ -150,6 +152,217 @@ Future<Response> onRequest(RequestContext context) async {
           'summary': 'List products currently on sale',
           'responses': {
             '200': _ok('On-sale products', '#/components/schemas/ProductListResponse'),
+          }
+        }
+      },
+      '/products/{id}/image': {
+        'post': {
+          'tags': ['Products'],
+          'summary': 'Upload product image to Cloudinary (multipart/form-data or JSON base64)',
+          'parameters': [_pathParam('id', 'Product ID')],
+          'requestBody': {
+            'required': true,
+            'content': {
+              'multipart/form-data': {
+                'schema': {
+                  'type': 'object',
+                  'properties': {
+                    'image': {'type': 'string', 'format': 'binary', 'description': 'Image file'},
+                  },
+                },
+              },
+              'application/json': {
+                'schema': {
+                  'type': 'object',
+                  'properties': {
+                    'image': {'type': 'string', 'description': 'Base64 encoded image string'},
+                    'filename': {'type': 'string', 'example': 'product.jpg'},
+                  },
+                },
+              },
+            },
+          },
+          'responses': {
+            '200': _ok('Image uploaded and linked to product', '#/components/schemas/ProductResponse'),
+            '400': _err('Bad request'),
+            '404': _err('Product not found'),
+          }
+        },
+        'delete': {
+          'tags': ['Products'],
+          'summary': 'Remove image URL from product',
+          'parameters': [_pathParam('id', 'Product ID')],
+          'requestBody': {
+            'required': true,
+            'content': {
+              'application/json': {
+                'schema': {
+                  'type': 'object',
+                  'required': ['image_url'],
+                  'properties': {
+                    'image_url': {'type': 'string'},
+                  },
+                },
+              },
+            },
+          },
+          'responses': {
+            '200': _ok('Image removed from product', '#/components/schemas/ProductResponse'),
+            '404': _err('Product not found'),
+          }
+        }
+      },
+      '/upload/image': {
+        'post': {
+          'tags': ['Products'],
+          'summary': 'Upload image directly to Cloudinary (standalone)',
+          'requestBody': {
+            'required': true,
+            'content': {
+              'multipart/form-data': {
+                'schema': {
+                  'type': 'object',
+                  'properties': {
+                    'image': {'type': 'string', 'format': 'binary'},
+                  },
+                },
+              },
+              'application/json': {
+                'schema': {
+                  'type': 'object',
+                  'properties': {
+                    'image': {'type': 'string', 'description': 'Base64 encoded image'},
+                    'filename': {'type': 'string', 'example': 'item.jpg'},
+                  },
+                },
+              },
+            },
+          },
+          'responses': {
+            '200': _ok('Image uploaded to Cloudinary'),
+            '400': _err('Bad request'),
+          }
+        }
+      },
+
+      // ── Categories ────────────────────────────────────────────────────────
+      '/category': {
+        'get': {
+          'tags': ['Categories'],
+          'summary': 'List all categories',
+          'responses': {
+            '200': _ok('Categories retrieved'),
+          }
+        },
+        'post': {
+          'tags': ['Categories'],
+          'summary': 'Create a new category',
+          'requestBody': {
+            'required': true,
+            'content': {
+              'application/json': {
+                'example': {
+                  'category_id': 'CAT-01',
+                  'category_name': 'Electronics',
+                  'description': 'Electronic devices',
+                },
+              }
+            }
+          },
+          'responses': {
+            '201': _ok('Category created'),
+            '400': _err('Bad request'),
+          }
+        }
+      },
+      '/category/{id}': {
+        'get': {
+          'tags': ['Categories'],
+          'summary': 'Get category by ID',
+          'parameters': [_pathParam('id', 'Category ID')],
+          'responses': {
+            '200': _ok('Category found'),
+            '404': _err('Category not found'),
+          }
+        },
+        'put': {
+          'tags': ['Categories'],
+          'summary': 'Update category',
+          'parameters': [_pathParam('id', 'Category ID')],
+          'responses': {
+            '200': _ok('Category updated'),
+            '404': _err('Category not found'),
+          }
+        },
+        'delete': {
+          'tags': ['Categories'],
+          'summary': 'Delete category',
+          'parameters': [_pathParam('id', 'Category ID')],
+          'responses': {
+            '200': _ok('Category deleted'),
+            '404': _err('Category not found'),
+          }
+        }
+      },
+
+      // ── Suppliers ─────────────────────────────────────────────────────────
+      '/suppliers': {
+        'get': {
+          'tags': ['Suppliers'],
+          'summary': 'List all suppliers',
+          'responses': {
+            '200': _ok('Suppliers retrieved'),
+          }
+        },
+        'post': {
+          'tags': ['Suppliers'],
+          'summary': 'Create a new supplier',
+          'requestBody': {
+            'required': true,
+            'content': {
+              'application/json': {
+                'example': {
+                  'supplier_id': 'SUP-01',
+                  'supplier_name': 'Tech Distro Ltd',
+                  'city': 'Phnom Penh',
+                  'phone': '+85512345678',
+                  'email': 'tech@distro.com',
+                },
+              }
+            }
+          },
+          'responses': {
+            '201': _ok('Supplier created'),
+            '400': _err('Bad request'),
+          }
+        }
+      },
+      '/suppliers/{id}': {
+        'get': {
+          'tags': ['Suppliers'],
+          'summary': 'Get supplier by ID',
+          'parameters': [_pathParam('id', 'Supplier ID')],
+          'responses': {
+            '200': _ok('Supplier found'),
+            '404': _err('Supplier not found'),
+          }
+        },
+        'put': {
+          'tags': ['Suppliers'],
+          'summary': 'Update supplier',
+          'parameters': [_pathParam('id', 'Supplier ID')],
+          'responses': {
+            '200': _ok('Supplier updated'),
+            '404': _err('Supplier not found'),
+          }
+        },
+        'delete': {
+          'tags': ['Suppliers'],
+          'summary': 'Delete supplier',
+          'parameters': [_pathParam('id', 'Supplier ID')],
+          'responses': {
+            '200': _ok('Supplier deleted'),
+            '404': _err('Supplier not found'),
           }
         }
       },
@@ -399,11 +612,13 @@ Future<Response> onRequest(RequestContext context) async {
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
-Map<String, dynamic> _ok(String description, String schemaRef) => {
+Map<String, dynamic> _ok(String description, [String? schemaRef]) => {
       'description': description,
       'content': {
         'application/json': {
-          'schema': {r'$ref': schemaRef},
+          'schema': schemaRef != null
+              ? {r'$ref': schemaRef}
+              : {'type': 'object'},
         }
       }
     };

@@ -1,18 +1,17 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class ProductModel {
-
   ProductModel({
-    this.id,
     required this.productId,
     required this.productName,
     required this.categoryId,
     required this.supplierId,
     required this.price,
+    required this.stock,
+    this.id,
     this.salePrice,
     this.saleStart,
     this.saleEnd,
-    required this.stock,
     this.description,
     List<String>? images,
     this.discountPercent,
@@ -25,9 +24,9 @@ class ProductModel {
     this.isActive = true,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : images = images ?? [],
-        createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : images = images ?? [],
+       createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   // ---------------------------------------------------------------------------
   // Serialization
@@ -36,10 +35,10 @@ class ProductModel {
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
       id: map['_id'] as ObjectId?,
-      productId: map['product_id'] as String,
-      productName: map['product_name'] as String,
-      categoryId: map['category_id'] as String,
-      supplierId: map['supplier_id'] as String,
+      productId: map['product_id'].toString(),
+      productName: map['product_name'].toString(),
+      categoryId: map['category_id'].toString(),
+      supplierId: map['supplier_id'].toString(),
       price: (map['price'] as num).toDouble(),
       salePrice: map['sale_price'] != null
           ? (map['sale_price'] as num).toDouble()
@@ -50,16 +49,20 @@ class ProductModel {
       saleEnd: map['sale_end'] != null
           ? DateTime.parse(map['sale_end'].toString())
           : null,
-      stock: map['stock'] as int,
-      description: map['description'] as String?,
-      images: List<String>.from(map['images'] ?? []),
+      stock: (map['stock'] as num).toInt(),
+      description: map['description'] != null
+          ? map['description'].toString()
+          : null,
+      images: (map['images'] as List<dynamic>? ?? const <dynamic>[])
+          .map((image) => image.toString())
+          .toList(),
       discountPercent: map['discount_percent'] != null
           ? (map['discount_percent'] as num).toDouble()
           : null,
       rating: (map['rating'] as num?)?.toDouble() ?? 0.0,
-      reviewCount: map['review_count'] as int? ?? 0,
-      sku: map['sku'] as String?,
-      barcode: map['barcode'] as String?,
+      reviewCount: (map['review_count'] as num?)?.toInt() ?? 0,
+      sku: map['sku'] != null ? map['sku'].toString() : null,
+      barcode: map['barcode'] != null ? map['barcode'].toString() : null,
       weight: map['weight'] != null ? (map['weight'] as num).toDouble() : null,
       dimensions: map['dimensions'] as Map<String, dynamic>?,
       isActive: map['is_active'] as bool? ?? true,
@@ -76,10 +79,10 @@ class ProductModel {
   final String productName;
   final String categoryId;
   final String supplierId;
-  final double price;          // original / regular price
-  final double? salePrice;     // sale price (null = not on sale)
-  final DateTime? saleStart;   // when the sale begins
-  final DateTime? saleEnd;     // when the sale ends
+  final double price; // original / regular price
+  final double? salePrice; // sale price (null = not on sale)
+  final DateTime? saleStart; // when the sale begins
+  final DateTime? saleEnd; // when the sale ends
   final int stock;
   final String? description;
   final List<String> images;
@@ -121,8 +124,7 @@ class ProductModel {
   double get savingsAmount => price - effectivePrice;
 
   /// Saving as a percentage of the original price.
-  double get savingsPercent =>
-      price > 0 ? (savingsAmount / price * 100) : 0.0;
+  double get savingsPercent => price > 0 ? (savingsAmount / price * 100) : 0.0;
 
   bool get inStock => stock > 0;
 

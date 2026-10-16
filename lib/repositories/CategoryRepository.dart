@@ -1,6 +1,6 @@
-import 'package:mongo_dart/mongo_dart.dart';
 import 'package:e_commerces/database/Mongodb.dart';
 import 'package:e_commerces/models/CategoryModel.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 class CategoryRepository {
   static const String _collection = 'categories';
@@ -27,7 +27,9 @@ class CategoryRepository {
 
   // UPDATE
   Future<CategoryModel?> update(
-      String categoryId, Map<String, dynamic> fields) async {
+    String categoryId,
+    Map<String, dynamic> fields,
+  ) async {
     fields['updated_at'] = DateTime.now().toIso8601String();
     await _col.updateOne(
       where.eq('category_id', categoryId),
@@ -38,8 +40,7 @@ class CategoryRepository {
 
   // DELETE
   Future<bool> delete(String categoryId) async {
-    final result =
-        await _col.deleteOne(where.eq('category_id', categoryId));
+    final result = await _col.deleteOne(where.eq('category_id', categoryId));
     return result.isSuccess;
   }
 
@@ -49,4 +50,3 @@ class CategoryRepository {
     return doc != null;
   }
 }
-

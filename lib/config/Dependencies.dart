@@ -1,10 +1,12 @@
 import 'dart:io';
-import 'package:mongo_dart/mongo_dart.dart';
+
 import 'package:e_commerces/controllers/PaymentController.dart';
 import 'package:e_commerces/payway/PayWayClient.dart';
 import 'package:e_commerces/repositories/OrderRepository.dart';
 import 'package:e_commerces/repositories/PaymentRepository.dart';
 import 'package:e_commerces/services/PaymentService.dart';
+import 'package:e_commerces/services/serviceImplementation/PaymentServiceImpl.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 /// Singleton dependency container.
 /// Reads credentials from environment variables.
@@ -32,18 +34,21 @@ class Dependencies {
     final mongoUri = env['MONGO_URI'] ?? 'mongodb://localhost:27017/ecommerce';
     final db = await Db.create(mongoUri);
     await db.open();
-    await db.collection('payments').createIndex(
-      keys: {'payment_id': 1},
-      unique: true,
-    );
+    await db
+        .collection('payments')
+        .createIndex(
+          keys: {'payment_id': 1},
+          unique: true,
+        );
 
     // ── ABA PayWay ───────────────────────────────────────────────────────────
     final merchantId =
-        env['PAYWAY_MERCHANT_ID'] ?? 'ec478715';         // sandbox default
-    final apiKey = env['PAYWAY_API_KEY'] ??
-        '1c6251cdbe1952e76438967aa1451f57009366d7';       // sandbox default
-    final baseUrl = env['PAYWAY_BASE_URL'] ??
-        'https://checkout-sandbox.payway.com.kh';
+        env['PAYWAY_MERCHANT_ID'] ?? 'ec478715'; // sandbox default
+    final apiKey =
+        env['PAYWAY_API_KEY'] ??
+        '1c6251cdbe1952e76438967aa1451f57009366d7'; // sandbox default
+    final baseUrl =
+        env['PAYWAY_BASE_URL'] ?? 'https://checkout-sandbox.payway.com.kh';
 
     final payway = PayWayClient(
       merchantId: merchantId,
@@ -52,10 +57,11 @@ class Dependencies {
     );
 
     // ── Services ─────────────────────────────────────────────────────────────
-    final callbackUrl = env['PAYWAY_CALLBACK_URL'] ??
-        'http://localhost:8080/payments/callback';        // dev fallback
+    final callbackUrl =
+        env['PAYWAY_CALLBACK_URL'] ??
+        'http://localhost:8080/payments/callback'; // dev fallback
 
-    final service = PaymentService(
+    final service = PaymentServiceImpl(
       payway: payway,
       payments: PaymentRepository(db),
       orders: MongoOrderRepository(db),

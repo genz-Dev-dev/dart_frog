@@ -14,14 +14,13 @@ enum NotificationType {
 }
 
 class NotificationModel {
-
   NotificationModel({
-    this.id,
     required this.notificationId,
     required this.customerId,
     required this.type,
     required this.title,
     required this.message,
+    this.id,
     this.referenceId,
     this.isRead = false,
     DateTime? createdAt,
@@ -51,7 +50,7 @@ class NotificationModel {
   final NotificationType type;
   final String title;
   final String message;
-  final String? referenceId;   // order_id, payment_id, product_id etc.
+  final String? referenceId; // order_id, payment_id, product_id etc.
   final bool isRead;
   final DateTime createdAt;
 
@@ -69,4 +68,3 @@ class NotificationModel {
     };
   }
 }
-

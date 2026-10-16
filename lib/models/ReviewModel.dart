@@ -1,14 +1,13 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class ReviewModel {
-
   ReviewModel({
-    this.id,
     required this.reviewId,
     required this.productId,
     required this.customerId,
     required this.orderId,
     required this.rating,
+    this.id,
     this.comment,
     List<String>? images,
     this.isVerifiedPurchase = false,
@@ -16,10 +15,10 @@ class ReviewModel {
     this.isVisible = true,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : assert(rating >= 1 && rating <= 5, 'Rating must be between 1 and 5'),
-        images = images ?? [],
-        createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : assert(rating >= 1 && rating <= 5, 'Rating must be between 1 and 5'),
+       images = images ?? [],
+       createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory ReviewModel.fromMap(Map<String, dynamic> map) {
     return ReviewModel(
@@ -30,7 +29,9 @@ class ReviewModel {
       orderId: map['order_id'] as String,
       rating: map['rating'] as int,
       comment: map['comment'] as String?,
-      images: List<String>.from(map['images'] ?? []),
+      images: List<String>.from(
+        (map['images'] as Iterable?) ?? const [],
+      ),
       isVerifiedPurchase: map['is_verified_purchase'] as bool? ?? false,
       helpfulCount: map['helpful_count'] as int? ?? 0,
       isVisible: map['is_visible'] as bool? ?? true,
@@ -47,7 +48,7 @@ class ReviewModel {
   final String productId;
   final String customerId;
   final String orderId;
-  final int rating;          // 1 - 5
+  final int rating; // 1 - 5
   final String? comment;
   final List<String> images;
   final bool isVerifiedPurchase;
@@ -74,4 +75,3 @@ class ReviewModel {
     };
   }
 }
-

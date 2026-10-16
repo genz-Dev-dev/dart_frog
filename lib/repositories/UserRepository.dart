@@ -1,12 +1,11 @@
-import 'package:e_commerces/models/UserModel.dart';
 import 'package:e_commerces/database/Mongodb.dart';
+import 'package:e_commerces/models/UserModel.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class UserRepository {
   static const String _collection = 'users';
 
-  DbCollection get _col =>
-      MongoDatabase.instance.collection(_collection);
+  DbCollection get _col => MongoDatabase.instance.collection(_collection);
 
   Future<User?> findByEmail(String email) async {
     final doc = await _col.findOne(where.eq('email', email));

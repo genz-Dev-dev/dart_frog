@@ -1,7 +1,8 @@
 import 'dart:convert';
+
 import 'package:crypto/crypto.dart';
-import 'package:http/http.dart' as http;
 import 'package:e_commerces/errors/PaymentException.dart';
+import 'package:http/http.dart' as http;
 
 /// ABA PayWay API client.
 /// Sandbox: https://checkout-sandbox.payway.com.kh/
@@ -14,7 +15,7 @@ class PayWayClient {
     required this.apiKey,
     String? baseUrl,
   }) : baseUrl = (baseUrl ?? 'https://checkout-sandbox.payway.com.kh')
-            .replaceAll(RegExp(r'/$'), '');
+           .replaceAll(RegExp(r'/$'), '');
 
   final String merchantId;
   final String apiKey;
@@ -25,16 +26,16 @@ class PayWayClient {
   // POST /api/payment-gateway/v1/payments/purchase
   // ---------------------------------------------------------------------------
   Future<Map<String, dynamic>> createKhqrPayment({
-    required String tranId,       // your unique payment ID ≤ 20 chars
-    required double amount,       // total in USD or KHR
-    required String currency,     // USD | KHR
-    required String callbackUrl,  // your /payments/callback endpoint
+    required String tranId, // your unique payment ID ≤ 20 chars
+    required double amount, // total in USD or KHR
+    required String currency, // USD | KHR
+    required String callbackUrl, // your /payments/callback endpoint
     String firstname = '',
     String lastname = '',
     String email = '',
     String phone = '',
     List<Map<String, dynamic>> items = const [],
-    String returnUrl = '',        // browser redirect after payment (web only)
+    String returnUrl = '', // browser redirect after payment (web only)
     String cancelUrl = '',
   }) async {
     final reqTime = _reqTime();
@@ -80,7 +81,9 @@ class PayWayClient {
     params['hash'] = _sign(params);
 
     return _post(
-        '/api/payment-gateway/v1/payments/check-transaction-2', params);
+      '/api/payment-gateway/v1/payments/check-transaction-2',
+      params,
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -88,15 +91,15 @@ class PayWayClient {
   // ---------------------------------------------------------------------------
 
   /// ISO-8601 timestamp in UTC that PayWay uses as part of the signed payload.
-  String _reqTime() =>
-      DateTime.now().toUtc().toIso8601String().replaceAll(RegExp(r'\.\d+Z$'), 'Z');
+  String _reqTime() => DateTime.now().toUtc().toIso8601String().replaceAll(
+    RegExp(r'\.\d+Z$'),
+    'Z',
+  );
 
   /// HMAC-SHA512 of the sorted key=value pairs, Base64-encoded.
   /// PayWay signs: alphabetically sorted keys joined by \n, then HMAC with apiKey.
   String _sign(Map<String, String> params) {
-    final sorted = (params.keys.toList()..sort())
-        .map((k) => params[k]!)
-        .join();
+    final sorted = (params.keys.toList()..sort()).map((k) => params[k]!).join();
     final key = utf8.encode(apiKey);
     final msg = utf8.encode(sorted);
     final digest = Hmac(sha512, key).convert(msg);
@@ -104,7 +107,9 @@ class PayWayClient {
   }
 
   Future<Map<String, dynamic>> _post(
-      String path, Map<String, String> params) async {
+    String path,
+    Map<String, String> params,
+  ) async {
     final uri = Uri.parse('$baseUrl$path');
 
     final response = await http.post(
@@ -135,4 +140,3 @@ class PayWayClient {
     }
   }
 }
-

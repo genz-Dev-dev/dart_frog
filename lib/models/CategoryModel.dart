@@ -1,18 +1,17 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class CategoryModel {
-
   CategoryModel({
-    this.id,
     required this.categoryId,
     required this.categoryName,
+    this.id,
     this.description,
     this.imageUrl,
     this.isActive = true,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
     return CategoryModel(
@@ -74,4 +73,3 @@ class CategoryModel {
     );
   }
 }
-

@@ -3,13 +3,12 @@ import 'package:mongo_dart/mongo_dart.dart';
 enum Gender { male, female, other, preferNotToSay }
 
 class AddressModel {
-
   AddressModel({
     required this.label,
     required this.street,
     required this.city,
-    this.state,
     required this.country,
+    this.state,
     this.postalCode,
     this.isDefault = false,
   });
@@ -47,13 +46,12 @@ class AddressModel {
 }
 
 class CustomerModel {
-
   CustomerModel({
-    this.id,
     required this.customerId,
     required this.name,
     required this.gender,
     required this.city,
+    this.id,
     this.email,
     this.phone,
     this.avatarUrl,
@@ -62,9 +60,9 @@ class CustomerModel {
     this.isActive = true,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : addresses = addresses ?? [],
-        createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : addresses = addresses ?? [],
+       createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory CustomerModel.fromMap(Map<String, dynamic> map) {
     return CustomerModel(
@@ -82,7 +80,8 @@ class CustomerModel {
       dateOfBirth: map['date_of_birth'] != null
           ? DateTime.parse(map['date_of_birth'].toString())
           : null,
-      addresses: (map['addresses'] as List<dynamic>?)
+      addresses:
+          (map['addresses'] as List<dynamic>?)
               ?.map((a) => AddressModel.fromMap(a as Map<String, dynamic>))
               .toList() ??
           [],
@@ -159,4 +158,3 @@ class CustomerModel {
     );
   }
 }
-

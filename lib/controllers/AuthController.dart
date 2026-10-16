@@ -1,25 +1,18 @@
 import 'package:dart_frog/dart_frog.dart';
-import 'package:e_commerces/services/UserService.dart';
-import 'package:e_commerces/repositories/UserRepository.dart';
 import 'package:e_commerces/database/Mongodb.dart';
+import 'package:e_commerces/dto/AuthDto.dart';
+import 'package:e_commerces/repositories/UserRepository.dart';
+import 'package:e_commerces/services/UserService.dart';
+import 'package:e_commerces/services/serviceImplementation/UserServiceImpl.dart';
 import 'package:e_commerces/utils/ApiResponse.dart';
 
-/// Handles all auth-related HTTP concerns:
-/// - request parsing
-/// - input validation
-/// - delegating to [AuthService]
-/// - building HTTP responses via [ApiResponse]
 class AuthController {
+  AuthController(this._userService);
+  final UserService _userService;
 
-  AuthController(this._authService);
-  final AuthService _authService;
-
-  // ---------------------------------------------------------------------------
-  // Factory — wires up the full dependency chain
-  // ---------------------------------------------------------------------------
   static AuthController create() {
     final repo = UserRepository();
-    final service = AuthService(repo);
+    final service = UserServiceImpl(repo);
     return AuthController(service);
   }
 
@@ -32,12 +25,12 @@ class AuthController {
 
       final body = await context.request.json() as Map<String, dynamic>;
 
-      final name = body['name'] as String?;
-      final email = body['email'] as String?;
-      final password = body['password'] as String?;
+      final name = body['name']?.toString().trim();
+      final email = body['email']?.toString().trim();
+      final password = body['password']?.toString();
 
       // --- Validation ---
-      if (name == null || name.trim().isEmpty) {
+      if (name == null || name.isEmpty) {
         return ApiResponse.badRequest('Name is required.');
       }
       if (email == null || !email.contains('@')) {
@@ -45,15 +38,12 @@ class AuthController {
       }
       if (password == null || password.length < 6) {
         return ApiResponse.badRequest(
-            'Password must be at least 6 characters.');
+          'Password must be at least 6 characters.',
+        );
       }
 
-      // --- Delegate to service ---
-      final user = await _authService.register(
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        password: password,
-      );
+      final dto = RegisterDto.fromJson(body);
+      final user = await _userService.register(dto);
 
       return ApiResponse.created(
         data: user.toJson(),
@@ -75,22 +65,19 @@ class AuthController {
 
       final body = await context.request.json() as Map<String, dynamic>;
 
-      final email = body['email'] as String?;
-      final password = body['password'] as String?;
+      final email = body['email']?.toString().trim();
+      final password = body['password']?.toString();
 
       // --- Validation ---
-      if (email == null || email.trim().isEmpty) {
+      if (email == null || email.isEmpty) {
         return ApiResponse.badRequest('Email is required.');
       }
       if (password == null || password.isEmpty) {
         return ApiResponse.badRequest('Password is required.');
       }
 
-      // --- Delegate to service ---
-      final token = await _authService.login(
-        email: email.trim().toLowerCase(),
-        password: password,
-      );
+      final dto = LoginDto.fromJson(body);
+      final token = await _userService.login(dto);
 
       return ApiResponse.single(
         data: {'token': token},

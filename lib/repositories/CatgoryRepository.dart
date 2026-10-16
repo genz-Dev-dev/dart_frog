@@ -1,6 +1,6 @@
-import 'package:mongo_dart/mongo_dart.dart';
 import 'package:e_commerces/database/Mongodb.dart';
 import 'package:e_commerces/models/CategoryModel.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 class CategoryRepository {
   static const String _collection = 'categories';

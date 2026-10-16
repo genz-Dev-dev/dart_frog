@@ -5,8 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 class ProductRepository {
   static const String _collection = 'products';
 
-  DbCollection get _col =>
-      MongoDatabase.instance.collection(_collection);
+  DbCollection get _col => MongoDatabase.instance.collection(_collection);
 
   Future<List<ProductModel>> findAll() async {
     final docs = await _col.find().toList();
@@ -47,7 +46,7 @@ class ProductRepository {
           'sale_start': saleStart?.toIso8601String(),
           'sale_end': saleEnd?.toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
-        }
+        },
       },
     );
     return result.isSuccess;
@@ -57,13 +56,51 @@ class ProductRepository {
   /// Active-sale filtering (date bounds) is done in Dart to avoid
   /// complex query chaining issues with this mongo_dart version.
   Future<List<ProductModel>> findOnSale() async {
-    final docs = await _col.find(
-      where.ne('sale_price', null),
-    ).toList();
+    final docs = await _col
+        .find(
+          where.ne('sale_price', null),
+        )
+        .toList();
 
     final products = docs.map(ProductModel.fromMap).toList();
 
     // Filter to only those whose sale window is currently active
     return products.where((p) => p.isOnSale).toList();
+  }
+
+  /// Add an image URL to the product's images list.
+  Future<void> addImage(String productId, String imageUrl) async {
+    await _col.updateOne(
+      where.eq('product_id', productId),
+      {
+        r'$push': {'images': imageUrl},
+        r'$set': {'updated_at': DateTime.now().toIso8601String()},
+      },
+    );
+  }
+
+  /// Add multiple image URLs to the product's images list.
+  Future<void> addImages(String productId, List<String> imageUrls) async {
+    if (imageUrls.isEmpty) return;
+    await _col.updateOne(
+      where.eq('product_id', productId),
+      {
+        r'$push': {
+          'images': {r'$each': imageUrls}
+        },
+        r'$set': {'updated_at': DateTime.now().toIso8601String()},
+      },
+    );
+  }
+
+  /// Remove an image URL from the product's images list.
+  Future<void> removeImage(String productId, String imageUrl) async {
+    await _col.updateOne(
+      where.eq('product_id', productId),
+      {
+        r'$pull': {'images': imageUrl},
+        r'$set': {'updated_at': DateTime.now().toIso8601String()},
+      },
+    );
   }
 }

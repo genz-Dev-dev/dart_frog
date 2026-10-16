@@ -1,13 +1,12 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 class CartItemModel {
-
   CartItemModel({
     required this.productId,
     required this.productName,
-    this.productImage,
     required this.unitPrice,
     required this.quantity,
+    this.productImage,
     this.discountPercent,
   });
 
@@ -51,25 +50,25 @@ class CartItemModel {
 }
 
 class CartModel {
-
   CartModel({
-    this.id,
     required this.cartId,
     required this.customerId,
+    this.id,
     List<CartItemModel>? items,
     this.couponCode,
     DateTime? createdAt,
     DateTime? updatedAt,
-  })  : items = items ?? [],
-        createdAt = createdAt ?? DateTime.now(),
-        updatedAt = updatedAt ?? DateTime.now();
+  }) : items = items ?? [],
+       createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   factory CartModel.fromMap(Map<String, dynamic> map) {
     return CartModel(
       id: map['_id'] as ObjectId?,
       cartId: map['cart_id'] as String,
       customerId: map['customer_id'] as String,
-      items: (map['items'] as List<dynamic>?)
+      items:
+          (map['items'] as List<dynamic>?)
               ?.map((i) => CartItemModel.fromMap(i as Map<String, dynamic>))
               .toList() ??
           [],
@@ -107,4 +106,3 @@ class CartModel {
     };
   }
 }
-
